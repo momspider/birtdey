@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Happy Birthday, P 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep:#2B1B4D;
+    --violet:#6A4FE0;
+    --lilac:#B892FF;
+    --pink:#FF9FC7;
+    --gold:#FFD98A;
+    --ink:#3A2657;
+    --ink-soft:#6E5C8C;
+    --accent:#FF4F81;
+    --card-bg:rgba(255,255,255,.90);
+  }
+
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  html,body{
+    margin:0;
+    width:100%;
+    overflow-x:hidden;
+  }
+
+  body{
+    min-height:100vh;
+    min-height:100svh;
+    font-family:'Quicksand', sans-serif;
+    color:var(--ink);
+    background:linear-gradient(160deg, var(--deep) 0%, var(--violet) 30%, var(--lilac) 55%, var(--pink) 78%, var(--gold) 100%);
+    background-size:200% 200%;
+    animation:skyDrift 22s ease-in-out infinite alternate;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    position:relative;
+  }
+
+  @keyframes skyDrift{
+    0%{ background-position:20% 10%; }
+    100%{ background-position:80% 90%; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    body{ animation:none; }
+    *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; }
+  }
+
+  /* ambient sparkles */
+  .sparkle-layer{
+    position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;
+  }
+  .sparkle{
+    position:absolute;
+    width:3px; height:3px;
+    background:#fff;
+    border-radius:50%;
+    opacity:.15;
+    animation:twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:.1; transform:scale(1); }
+    50%{ opacity:.85; transform:scale(1.8); }
+  }
+
+  /* balloons */
+  .balloon-layer{
+    position:fixed; inset:0; z-index:2; overflow:hidden; pointer-events:none;
+  }
+  .balloon{
+    position:absolute;
+    bottom:-170px;
+    width:var(--bsize);
+    height:calc(var(--bsize) * 1.18);
+    pointer-events:auto;
+    cursor:pointer;
+    touch-action:manipulation;
+    user-select:none;
+    animation:floatUp linear infinite;
+    animation-duration:var(--bdur);
+    animation-delay:var(--bdelay);
+    left:var(--bleft);
+    will-change:transform, opacity;
+  }
+  .balloon::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50% 50% 50% 50% / 58% 58% 42% 42%;
+    background:
+      radial-gradient(circle at 30% 26%, rgba(255,255,255,.6), rgba(255,255,255,0) 42%),
+      var(--bcolor);
+    box-shadow:0 10px 20px rgba(43,27,77,.18);
+  }
+  .balloon::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-24px;
+    width:1.5px;
+    height:24px;
+    background:rgba(58,38,87,.35);
+  }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) rotate(-6deg); opacity:0; }
+    8%{ opacity:.95; }
+    50%{ transform:translateY(-56vh) rotate(6deg); }
+    92%{ opacity:.95; }
+    100%{ transform:translateY(-118vh) rotate(-5deg); opacity:0; }
+  }
+  .balloon.popped{
+    animation:popAnim .35s ease forwards;
+    pointer-events:none;
+  }
+  @keyframes popAnim{
+    0%{ transform:scale(1); opacity:1; }
+    45%{ transform:scale(1.4); opacity:1; }
+    100%{ transform:scale(0); opacity:0; }
+  }
+
+  .burst-particle{
+    position:fixed;
+    width:7px; height:7px;
+    border-radius:50%;
+    z-index:30;
+    pointer-events:none;
+    transform:translate(-50%,-50%);
+    animation:burst .55s ease-out forwards;
+  }
+  @keyframes burst{
+    0%{ transform:translate(-50%,-50%) translate(0,0) scale(1); opacity:1; }
+    100%{ transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) scale(.3); opacity:0; }
+  }
+
+  .hint{
+    position:fixed;
+    top:max(14px, env(safe-area-inset-top));
+    left:50%;
+    transform:translateX(-50%);
+    z-index:3;
+    font-family:'Caveat', cursive;
+    font-size:19px;
+    color:rgba(255,255,255,.85);
+    text-align:center;
+    pointer-events:none;
+  }
+
+  /* card */
+  .card{
+    width:min(400px, 92vw);
+    background:var(--card-bg);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.6);
+    border-radius:30px;
+    padding:clamp(24px, 6vw, 34px) clamp(20px, 6vw, 30px);
+    text-align:center;
+    box-shadow:0 24px 60px rgba(43,27,77,.35);
+    position:relative;
+    z-index:5;
+    transition:transform .4s ease;
+  }
+  @media (hover:hover) and (pointer:fine){
+    .card:hover{ transform:translateY(-4px); }
+  }
+
+  .cake-wrap{
+    position:relative;
+    display:inline-block;
+    margin-bottom:6px;
+  }
+  .cake-wrap::before{
+    content:"";
+    position:absolute;
+    inset:-14px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,217,138,.55), rgba(255,217,138,0) 70%);
+    animation:pulseRing 2.4s ease-in-out infinite;
+  }
+  @keyframes pulseRing{
+    0%,100%{ transform:scale(.9); opacity:.6; }
+    50%{ transform:scale(1.08); opacity:1; }
+  }
+  .cake{
+    position:relative;
+    font-size:clamp(58px, 16vw, 78px);
+    cursor:pointer;
+    touch-action:manipulation;
+    user-select:none;
+    transition:transform .2s ease;
+    display:inline-block;
+  }
+  .cake:active{ transform:scale(.9) rotate(-4deg); }
+  @media (hover:hover) and (pointer:fine){
+    .cake:hover{ transform:scale(1.12) rotate(4deg); }
+  }
+
+  h1{
+    font-family:'Caveat', cursive;
+    font-weight:700;
+    color:var(--accent);
+    font-size:clamp(38px, 11vw, 50px);
+    margin:4px 0 0;
+    line-height:1;
+  }
+  h2{
+    font-family:'Caveat', cursive;
+    font-weight:600;
+    color:var(--violet);
+    font-size:clamp(24px, 7vw, 28px);
+    margin:6px 0 14px;
+  }
+  p{
+    color:var(--ink-soft);
+    line-height:1.65;
+    font-size:15.5px;
+    margin:0 0 12px;
+  }
+
+  .gift-wrap{ margin-top:10px; }
+  .gift{
+    font-size:clamp(48px, 13vw, 62px);
+    cursor:pointer;
+    display:inline-block;
+    touch-action:manipulation;
+    user-select:none;
+    transition:transform .2s ease;
+  }
+  .gift:active{ transform:scale(.88) rotate(-6deg); }
+  @media (hover:hover) and (pointer:fine){
+    .gift:hover{ transform:scale(1.15) rotate(-8deg); }
+  }
+  .gift-caption{
+    font-family:'Caveat', cursive;
+    font-size:18px;
+    color:var(--ink-soft);
+    margin:2px 0 0;
+  }
+
+  .surprise{
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:max-height .6s ease, opacity .5s ease .05s;
+  }
+  .surprise.show{
+    max-height:600px;
+    opacity:1;
+    margin-top:10px;
+  }
+
+  .sticker-btn{
+    border:none;
+    font-family:'Quicksand', sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    color:#fff;
+    padding:13px 22px;
+    margin:8px 6px 4px;
+    border-radius:22px;
+    min-height:44px;
+    cursor:pointer;
+    touch-action:manipulation;
+    background:var(--accent);
+    box-shadow:4px 4px 0 rgba(58,38,87,.22);
+    transform:rotate(-1.2deg);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .sticker-btn.alt{
+    background:var(--violet);
+    transform:rotate(1deg);
+  }
+  .sticker-btn:active{
+    transform:translate(3px,3px) rotate(0deg);
+    box-shadow:1px 1px 0 rgba(58,38,87,.22);
+  }
+
+  .secret{
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:max-height .5s ease, opacity .4s ease;
+    background:var(--gold);
+    border-radius:14px;
+    transform:rotate(-1.5deg);
+  }
+  .secret.show{
+    max-height:300px;
+    opacity:1;
+    margin-top:14px;
+    padding:14px 16px;
+  }
+  .secret p{
+    color:var(--ink);
+    font-family:'Caveat', cursive;
+    font-size:20px;
+    line-height:1.5;
+    margin:0;
+  }
+
+  .confetti{
+    position:fixed;
+    top:-20px;
+    z-index:25;
+    pointer-events:none;
+    animation-name:confettiFall;
+    animation-timing-function:ease-in;
+    animation-fill-mode:forwards;
+  }
+  @keyframes confettiFall{
+    0%{ transform:translate(0,0) rotate(0deg); opacity:1; }
+    100%{ transform:translate(var(--drift), 108vh) rotate(var(--spin)); opacity:.85; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="sparkle-layer" id="sparkles"></div>
+  <div class="balloon-layer" id="balloons"></div>
+  <p class="hint">tap the balloons ✨</p>
+
+  <div class="card">
+    <div class="cake-wrap">
+      <div class="cake" onclick="celebrate()">🎂</div>
+    </div>
+    <h1>Happy Birthday!</h1>
+    <h2>Dear P 💕</h2>
+    <p>Today is all about celebrating YOU! May your birthday be filled with happiness, laughter, love, and unforgettable memories.</p>
+    <p>May all your wishes come true and may this new chapter bring you countless reasons to smile. ✨</p>
+
+    <div class="gift-wrap">
+      <div class="gift" onclick="openGift()">🎁</div>
+      <p class="gift-caption">psst — open me</p>
+    </div>
+
+    <div id="surprise" class="surprise">
+      <h2 style="margin-top:14px;">🎊 Surprise! 🎊</h2>
+      <p>You deserve all the happiness in the world! Keep smiling, keep dreaming, and keep being the amazing person you are.</p>
+      <button class="sticker-btn" onclick="celebrate()">🎉 Celebrate!</button>
+      <button class="sticker-btn alt" onclick="showSecret()">💌 Secret message</button>
+      <div id="secret" class="secret">
+        <p>"Another year older, another year more awesome!" 💕<br>Happy Birthday, P! 🎂✨</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ---------- ambient sparkles ----------
+  const sparkleLayer = document.getElementById('sparkles');
+  for (let i = 0; i < 18; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.top = Math.random() * 100 + 'vh';
+    s.style.animationDelay = (Math.random() * 3.5) + 's';
+    sparkleLayer.appendChild(s);
+  }
+
+  // ---------- balloons ----------
+  const balloonColors = ['#FF9FC7', '#B892FF', '#FFD98A', '#8FE3D0', '#7C6BFF', '#FF7A9E'];
+  const balloonsLayer = document.getElementById('balloons');
+  const BALLOON_COUNT = 7;
+
+  function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function randomizeBalloon(el, withDelay){
+    el.style.setProperty('--bsize', (44 + Math.random() * 26) + 'px');
+    el.style.setProperty('--bcolor', pick(balloonColors));
+    el.style.setProperty('--bleft', (Math.random() * 88) + 'vw');
+    el.style.setProperty('--bdur', (9 + Math.random() * 6) + 's');
+    el.style.setProperty('--bdelay', withDelay ? (Math.random() * 5) + 's' : '0s');
+  }
+
+  function createBalloon(){
+    const el = document.createElement('div');
+    el.className = 'balloon';
+    randomizeBalloon(el, true);
+    el.addEventListener('pointerdown', popBalloon);
+    el.addEventListener('animationend', (e) => {
+      if (e.animationName === 'popAnim') respawnBalloon(el);
+    });
+    balloonsLayer.appendChild(el);
+  }
+
+  function popBalloon(e){
+    const el = e.currentTarget;
+    if (el.classList.contains('popped')) return;
+    el.classList.add('popped');
+    const rect = el.getBoundingClientRect();
+    const color = getComputedStyle(el).getPropertyValue('--bcolor').trim() || '#FF9FC7';
+    spawnBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, color);
+    playPop();
+    if (navigator.vibrate) navigator.vibrate(15);
+  }
+
+  function respawnBalloon(el){
+    randomizeBalloon(el, false);
+    el.style.animationDelay = (Math.random() * 1.2) + 's';
+    el.classList.remove('popped');
+  }
+
+  for (let i = 0; i < BALLOON_COUNT; i++) createBalloon();
+
+  function spawnBurst(x, y, color){
+    const n = 12;
+    for (let i = 0; i < n; i++) {
+      const p = document.createElement('div');
+      p.className = 'burst-particle';
+      const angle = (Math.PI * 2 * i / n) + (Math.random() * 0.5 - 0.25);
+      const dist = 36 + Math.random() * 46;
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      p.style.background = color;
+      document.body.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+  }
+
+  // ---------- soft pop sound ----------
+  let audioCtx;
+  function playPop(){
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(520, t);
+      osc.frequency.exponentialRampToValueAtTime(180, t + 0.12);
+      gain.gain.setValueAtTime(0.16, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.16);
+    }catch(err){ /* audio unavailable, ignore */ }
+  }
+
+  // ---------- gift / secret reveal ----------
+  let giftOpened = false;
+  function openGift(){
+    if (giftOpened) return;
+    giftOpened = true;
+    document.getElementById('surprise').classList.add('show');
+    celebrate();
+  }
+  function showSecret(){
+    document.getElementById('secret').classList.add('show');
+    celebrate();
+  }
+
+  // ---------- confetti burst ----------
+  function celebrate(){
+    const colors = ['#FF5B98', '#B892FF', '#FFD98A', '#6FE3C8', '#7C6BFF'];
+    for (let i = 0; i < 70; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      const isCircle = Math.random() > 0.5;
+      const size = 6 + Math.random() * 7;
+      c.style.width = size + 'px';
+      c.style.height = (isCircle ? size : size * 0.5) + 'px';
+      c.style.borderRadius = isCircle ? '50%' : '2px';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = pick(colors);
+      c.style.setProperty('--drift', (Math.random() * 160 - 80) + 'px');
+      c.style.setProperty('--spin', (Math.random() * 720 - 360) + 'deg');
+      c.style.animationDuration = (2.6 + Math.random() * 1.6) + 's';
+      c.style.animationDelay = (Math.random() * 0.4) + 's';
+      document.body.appendChild(c);
+      c.addEventListener('animationend', () => c.remove());
+    }
+  }
+</script>
+</body>
+</html>
